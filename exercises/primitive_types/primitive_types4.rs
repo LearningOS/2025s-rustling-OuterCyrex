@@ -8,7 +8,7 @@
 
 #[test]
 fn slice_out_of_array() {
-    let a = [1, 2, 3, 4, 5];
+    let a: [i32; 5] = [1, 2, 3, 4, 5];
 
     let nice_slice = &a[1..4];
 

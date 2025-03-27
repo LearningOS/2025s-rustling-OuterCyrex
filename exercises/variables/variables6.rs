@@ -4,7 +4,7 @@
 // hint.
 
 
-const NUMBER: i32 = 3;
+const NUMBER: i32 = 3i32;
 fn main() {
     println!("Number {}", NUMBER);
 }
