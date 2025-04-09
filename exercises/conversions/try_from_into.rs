@@ -27,8 +27,6 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
-
 // Your task is to complete this implementation and return an Ok result of inner
 // type Color. You need to create an implementation for a tuple of three
 // integers, an array of three integers, and a slice of integers.
@@ -37,10 +35,32 @@ enum IntoColorError {
 // time, but the slice implementation needs to check the slice length! Also note
 // that correct RGB color values must be integers in the 0..=255 range.
 
+
+fn CheckColorValid(color: i16) -> bool {
+    if color < 0 {
+        false
+    } else if color > 255 {
+        false
+    } else {
+        true
+    }
+}
+
 // Tuple implementation
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let (r, g, b) = tuple;
+        if !CheckColorValid(r) {
+            return Err(IntoColorError::IntConversion);
+        }
+        if !CheckColorValid(g) {
+            return Err(IntoColorError::IntConversion);
+        }
+        if !CheckColorValid(b) {
+            return Err(IntoColorError::IntConversion);
+        }
+        Ok(Color{red: r as u8, green: g as u8, blue: b as u8})
     }
 }
 
@@ -48,6 +68,13 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        for c in arr {
+            if !CheckColorValid(c) {
+                return Err(IntoColorError::IntConversion);
+            }
+        }
+
+        Ok(Color{red: arr[0] as u8, green: arr[1] as u8, blue: arr[2] as u8})
     }
 }
 
@@ -55,6 +82,17 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        }
+
+        for c in slice {
+            if !CheckColorValid(*c) {
+                return Err(IntoColorError::IntConversion);
+            }
+        }
+
+        Ok(Color{red: slice[0] as u8, green: slice[1] as u8, blue: slice[2] as u8})
     }
 }
 
